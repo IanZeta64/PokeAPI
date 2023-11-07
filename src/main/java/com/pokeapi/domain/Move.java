@@ -1,5 +1,6 @@
-package com.pokeapi.model;
+package com.pokeapi.domain;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 public class Move {
-  private Integer LearnAtLv;
+
   private String name;
+//  private Integer LearnAtLv;
+
 }

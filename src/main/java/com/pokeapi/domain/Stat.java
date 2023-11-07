@@ -1,14 +1,13 @@
-package com.pokeapi.model;
+package com.pokeapi.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class Type {
-  private Byte slot;
+public class Stat {
+  private Integer baseStat;
   private String name;
 }
