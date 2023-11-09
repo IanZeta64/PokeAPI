@@ -7,5 +7,6 @@ import reactor.core.publisher.Flux;
 
 public interface PokeAPIRepository extends ReactiveMongoRepository<Pokemon, String> {
 
-  Flux<Pokemon> findAllByDexNumber(Integer dexNumber);
+  Flux<Pokemon> findAllByDexNumberAndIsAvailableTrue(Integer dexNumber);
+  Flux<Pokemon> findAllByNameStartingWithAndIsAvailableTrue(String name);
 }

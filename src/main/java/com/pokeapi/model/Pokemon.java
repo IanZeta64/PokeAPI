@@ -51,4 +51,8 @@ public class Pokemon {
     this.modifiedOn = modifiedOn;
     this.isAvailable = isAvailable;
   }
+  public void changeAvailability(){
+    this.modifiedOn = Instant.now();
+    this.isAvailable = !this.isAvailable;
+  }
 }
