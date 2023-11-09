@@ -7,7 +7,7 @@ import com.pokeapi.domain.Type;
 
 import java.util.List;
 
-public record PokemonRequest(Integer dexNumber, String name, Float height, Float weight,
+public record PokemonRequest(Integer dexNumber, String name, String region, Float height, Float weight,
                              Integer baseExp, List<Ability> abilities, List<Type> types,
                              List<Stat> stats, List<Move> moves, List<String> spritesUrl) {
 }

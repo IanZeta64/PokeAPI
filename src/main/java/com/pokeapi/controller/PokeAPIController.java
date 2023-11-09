@@ -2,26 +2,30 @@ package com.pokeapi.controller;
 
 import com.pokeapi.dto.PokemonRequest;
 import com.pokeapi.dto.PokemonResponse;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 
 @RequestMapping("/PokeAPI")
 public interface PokeAPIController {
   @PostMapping
-  Mono<PokemonResponse> save(@Validated @RequestBody PokemonRequest request);
+  Mono<ResponseEntity<PokemonResponse>> save(@Validated @RequestBody PokemonRequest request);
+  @PostMapping("/{dexNumber}")
+  Mono<ResponseEntity<PokemonResponse>> register(@Validated @PathVariable Integer dexNumber);
   @GetMapping
-  Flux<PokemonResponse> getAll();
+  Mono<ResponseEntity<List<PokemonResponse>>> getAll();
   @GetMapping("/dex/{dexNumber}")
-  Flux<PokemonResponse> getByDexNumber(@PathVariable Integer dexNumber);
+  Mono<ResponseEntity<List<PokemonResponse>>> getByDexNumber(@PathVariable Integer dexNumber);
   @GetMapping(params="name")
-  Flux<PokemonResponse> getByName(@RequestParam Integer dexNumber);
+  Mono<ResponseEntity<List<PokemonResponse>>> searchByName(@RequestParam String name);
   @PutMapping("/{id}")
-  Mono<PokemonResponse> update(@Validated @RequestBody PokemonRequest request, @PathVariable String id);
+  Mono<ResponseEntity<PokemonResponse>> update(@Validated @RequestBody PokemonRequest request, @PathVariable String id);
   @GetMapping("/registerId/{id}")
-  Mono<PokemonResponse> getById(@PathVariable String id);
+  Mono<ResponseEntity<PokemonResponse>> getById(@PathVariable String id);
   @DeleteMapping("/{id}")
-  Mono<Void> deleteById(@PathVariable String id);
+  Mono<ResponseEntity<Void>> deleteById(@PathVariable String id);
 }

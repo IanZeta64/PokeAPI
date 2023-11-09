@@ -7,10 +7,11 @@ import reactor.core.publisher.Mono;
 
 public interface PokeAPIService {
   Mono<PokemonResponse> save(PokemonRequest request);
+  Mono<PokemonResponse> register(Integer id);
   Flux<PokemonResponse> getAll();
   Flux<PokemonResponse> getByDexNumber(Integer dexNumber);
-  Flux<PokemonResponse> getByName(Integer dexNumber);
-  Mono<PokemonResponse> update(PokemonRequest request, Integer id);
-  Mono<PokemonResponse> getById(Integer id);
-  Mono<Void> deleteById(Integer id);
+  Flux<PokemonResponse> searchByName(String name);
+  Mono<PokemonResponse> update(PokemonRequest request, String id);
+  Mono<PokemonResponse> getById(String id);
+  Mono<Void> deleteById(String id);
 }

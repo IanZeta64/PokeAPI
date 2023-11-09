@@ -27,6 +27,13 @@ private final Mapper mapper;
   }
 
   @Override
+  public Mono<PokemonResponse> register(Integer dexNumber) {
+    return Mono.defer(() ->client.getByDexNumber(dexNumber).map(mapper::DTOToEntity))
+      .flatMap(repository::save).map(mapper::EntityToResponse)
+      .subscribeOn(Schedulers.boundedElastic());
+  }
+
+  @Override
   public Flux<PokemonResponse> getAll() {
     return null;
   }
@@ -34,27 +41,27 @@ private final Mapper mapper;
   @Override
   public Flux<PokemonResponse> getByDexNumber(Integer dexNumber) {
     return Flux.defer(() ->
-        client.getByDexNumber(dexNumber).map(mapper::DTOToEntity).flatMap(mapper::EntityToResponse))
+       repository.findAllByDexNumber(dexNumber)).map(mapper::EntityToResponse)
       .subscribeOn(Schedulers.boundedElastic());
   }
 
   @Override
-  public Flux<PokemonResponse> getByName(Integer dexNumber) {
+  public Flux<PokemonResponse> searchByName(String name) {
     return null;
   }
 
   @Override
-  public Mono<PokemonResponse> update(PokemonRequest request, Integer id) {
+  public Mono<PokemonResponse> update(PokemonRequest request, String id) {
     return null;
   }
 
   @Override
-  public Mono<PokemonResponse> getById(Integer id) {
+  public Mono<PokemonResponse> getById(String id) {
     return null;
   }
 
   @Override
-  public Mono<Void> deleteById(Integer id) {
+  public Mono<Void> deleteById(String id) {
     return null;
   }
 }
