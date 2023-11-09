@@ -1,6 +1,5 @@
 package com.pokeapi.controller;
 
-import com.pokeapi.client.dto.PokeDTO;
 import com.pokeapi.dto.PokemonRequest;
 import com.pokeapi.dto.PokemonResponse;
 import org.springframework.validation.annotation.Validated;
@@ -16,7 +15,7 @@ public interface PokeAPIController {
   @GetMapping
   Flux<PokemonResponse> getAll();
   @GetMapping("/dex/{dexNumber}")
-  Flux<PokeDTO> getByDexNumber(@PathVariable Integer dexNumber);
+  Flux<PokemonResponse> getByDexNumber(@PathVariable Integer dexNumber);
   @GetMapping(params="name")
   Flux<PokemonResponse> getByName(@RequestParam Integer dexNumber);
   @PutMapping("/{id}")

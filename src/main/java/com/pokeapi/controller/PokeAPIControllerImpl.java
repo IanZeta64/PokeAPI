@@ -1,6 +1,5 @@
 package com.pokeapi.controller;
 
-import com.pokeapi.client.dto.PokeDTO;
 import com.pokeapi.dto.PokemonRequest;
 import com.pokeapi.dto.PokemonResponse;
 import com.pokeapi.service.PokeAPIService;
@@ -27,7 +26,7 @@ public class PokeAPIControllerImpl implements PokeAPIController{
   }
 
   @Override
-  public Flux<PokeDTO> getByDexNumber(Integer dexNumber) {
+  public Flux<PokemonResponse> getByDexNumber(Integer dexNumber) {
     return service.getByDexNumber(dexNumber).subscribeOn(Schedulers.parallel());
   }
 

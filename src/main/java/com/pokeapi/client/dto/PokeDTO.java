@@ -1,7 +1,6 @@
 package com.pokeapi.client.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.pokeapi.domain.Stat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,11 +20,11 @@ public class PokeDTO {
   @JsonProperty("base_experience")
   private Integer baseExp;
   @JsonProperty("height")
-  private Integer height;
+  private Float height;
   @JsonProperty("weight")
-  private Integer weight;
+  private Float weight;
   @JsonProperty("sprites")
-  private SpritesDTO imageUrlDefault;
+  private SpritesDTO imagesUrl;
   @JsonProperty("types")
   private List<TypeInfoDTO> types;
   @JsonProperty("moves")
@@ -34,5 +33,4 @@ public class PokeDTO {
   private List<StatsInfoDTO> stats;
   @JsonProperty("is_default")
   private Boolean isDefault;
-
 }

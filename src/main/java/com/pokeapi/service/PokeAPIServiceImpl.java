@@ -2,10 +2,10 @@ package com.pokeapi.service;
 
 //import com.pokeapi.client.PokeAPIExternalClient;
 import com.pokeapi.client.PokeAPIExternalClient;
-import com.pokeapi.client.dto.PokeDTO;
 import com.pokeapi.dto.PokemonRequest;
 import com.pokeapi.dto.PokemonResponse;
 import com.pokeapi.repository.PokeAPIRepository;
+import com.pokeapi.util.Mapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,6 +19,7 @@ import reactor.core.scheduler.Schedulers;
 public class PokeAPIServiceImpl implements PokeAPIService{
 private final PokeAPIRepository repository;
 private final PokeAPIExternalClient client;
+private final Mapper mapper;
 
   @Override
   public Mono<PokemonResponse> save(PokemonRequest request) {
@@ -31,10 +32,10 @@ private final PokeAPIExternalClient client;
   }
 
   @Override
-  public Flux<PokeDTO> getByDexNumber(Integer dexNumber) {
-    return Flux.defer(() -> {
-      return client.searchByDexNumber(dexNumber);
-    }).subscribeOn(Schedulers.boundedElastic());
+  public Flux<PokemonResponse> getByDexNumber(Integer dexNumber) {
+    return Flux.defer(() ->
+        client.getByDexNumber(dexNumber).map(mapper::DTOToEntity).flatMap(mapper::EntityToResponse))
+      .subscribeOn(Schedulers.boundedElastic());
   }
 
   @Override

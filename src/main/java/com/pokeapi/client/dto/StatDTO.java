@@ -2,9 +2,9 @@ package com.pokeapi.client.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class StatDTO {
-  @JsonProperty("name")
-  private String name;
-  @JsonProperty("url")
-  private String url;
+public record StatDTO(@JsonProperty("name")
+                      String name,
+                      @JsonProperty("url")
+                      String url) {
+
 }

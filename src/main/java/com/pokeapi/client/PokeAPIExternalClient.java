@@ -1,9 +1,6 @@
 package com.pokeapi.client;
 
 import com.pokeapi.client.dto.PokeDTO;
-import lombok.RequiredArgsConstructor;
-import org.springframework.cloud.client.circuitbreaker.ReactiveCircuitBreaker;
-import org.springframework.cloud.client.circuitbreaker.ReactiveCircuitBreakerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -22,8 +19,19 @@ public class PokeAPIExternalClient {
 //    this.reactiveCircuitBreaker = reactiveCircuitBreaker.create("pokeAPI-circuit-breaker");
   }
 
-  public Mono<PokeDTO> searchByDexNumber(Integer dexNumber){
+  public Mono<PokeDTO> getByDexNumber(Integer dexNumber){
     return this.client.get().uri(dexNumber.toString())
+      .exchangeToMono(result -> {
+        if (result.statusCode().is2xxSuccessful()){
+          return result.bodyToMono(PokeDTO.class);
+        }else {
+          return Mono.empty();
+        }
+      }).subscribeOn((Schedulers.boundedElastic()));
+  }
+
+  public Mono<PokeDTO> getByName(String name){
+    return this.client.get().uri(name)
       .exchangeToMono(result -> {
         if (result.statusCode().is2xxSuccessful()){
           return result.bodyToMono(PokeDTO.class);
