@@ -1,11 +1,16 @@
-server:
-  port: 8080
-
 spring:
-  application:
-    name: pokeAPI
   data:
     mongodb:
-      host: mongodb
+      host: localhost
       port: 27017
       database: pokeAPI
+#resilience4j:
+#  circuitbreaker:
+#    instances:
+#      aposta-api-circuit-breaker:
+#        slidingWindowSize: 10
+#        failureRateThreshold: 50
+#        waitDurationInOpenState: 10000
+#        slowCallDurationThreshold: 500
+#        slowCallRateThreshold: 50
+#        permittedNumberOfCallsInHalfOpenState: 3
