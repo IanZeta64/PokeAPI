@@ -24,7 +24,7 @@ public interface PokeAPIController {
   Mono<ResponseEntity<List<PokemonResponse>>> searchByName(@RequestParam String name);
   @PutMapping("/{id}")
   Mono<ResponseEntity<PokemonResponse>> update(@Validated @RequestBody PokemonRequest request, @PathVariable String id);
-  @GetMapping("/registerId/{id}")
+  @GetMapping("/id/{id}")
   Mono<ResponseEntity<PokemonResponse>> getById(@PathVariable String id);
   @DeleteMapping("/{id}")
   Mono<ResponseEntity<Void>> deleteById(@PathVariable String id);

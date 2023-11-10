@@ -4,6 +4,7 @@ import com.pokeapi.domain.Ability;
 import com.pokeapi.domain.Move;
 import com.pokeapi.domain.Stat;
 import com.pokeapi.domain.Type;
+import com.pokeapi.dto.PokemonRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -51,6 +52,22 @@ public class Pokemon {
     this.modifiedOn = modifiedOn;
     this.isAvailable = isAvailable;
   }
+
+  public Pokemon update(PokemonRequest request) {
+    this.dexNumber = request.dexNumber();
+    this.name = request.name();
+    this.height = request.height();
+    this.weight = request.weight();
+    this.baseExp = request.baseExp();
+    this.abilities = request.abilities();
+    this.types = request.types();
+    this.stats = request.stats();
+    this.moves = request.moves();
+    this.images = request.spritesUrl();
+    this.modifiedOn = Instant.now();
+    return this;
+  }
+
   public void changeAvailability(){
     this.modifiedOn = Instant.now();
     this.isAvailable = !this.isAvailable;
