@@ -31,13 +31,14 @@ public class Pokemon {
   private List<Stat> stats;
   private List<Move> moves;
   private List<String> images;
+  private Boolean isFake;
   private Instant createdOn;
   private Instant modifiedOn;
   private Boolean isAvailable;
 
   public Pokemon(Integer dexNumber, String name, Float height, Float weight, Integer baseExp,
                  List<Ability> abilities, List<Type> types, List<Stat> stats, List<Move> moves, List<String> images,
-                 Instant createdOn, Instant modifiedOn, Boolean isAvailable) {
+                 Instant createdOn, Instant modifiedOn, Boolean isFake, Boolean isAvailable) {
     this.dexNumber = dexNumber;
     this.name = name;
     this.height = height;
@@ -48,6 +49,7 @@ public class Pokemon {
     this.stats = stats;
     this.moves = moves;
     this.images = images;
+    this.isFake = isFake;
     this.createdOn = createdOn;
     this.modifiedOn = modifiedOn;
     this.isAvailable = isAvailable;
