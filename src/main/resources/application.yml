@@ -4,6 +4,9 @@ spring:
       host: localhost
       port: 27017
       database: pokeAPI
+
+  codec:
+    max-in-memory-size: 2MB
 #resilience4j:
 #  circuitbreaker:
 #    instances:

@@ -28,8 +28,17 @@ public class PokeAPIControllerImpl implements PokeAPIController{
   }
 
   @Override
-  public Mono<ResponseEntity<PokemonResponse>> register(Integer dexNumber) {
-    return Mono.defer(() -> service.register(dexNumber))
+  public Mono<ResponseEntity<PokemonResponse>> registerByDexNumber(Integer dexNumber) {
+    return Mono.defer(() -> service.registerByDexNumber(dexNumber))
+      .subscribeOn(Schedulers.parallel())
+      .map(response -> ResponseEntity.status(201).body(response))
+      .doOnError(err -> log.error("Failed register pokemon - {}", err.getMessage()))
+      .doOnNext(it -> log.info("Pokemon successfully registered - {}", it));
+  }
+
+  @Override
+  public Mono<ResponseEntity<PokemonResponse>> registerByName(String name) {
+    return Mono.defer(() -> service.registerByName(name))
       .subscribeOn(Schedulers.parallel())
       .map(response -> ResponseEntity.status(201).body(response))
       .doOnError(err -> log.error("Failed register pokemon - {}", err.getMessage()))
@@ -39,6 +48,15 @@ public class PokeAPIControllerImpl implements PokeAPIController{
   @Override
   public Mono<ResponseEntity<List<PokemonResponse>>> getAll() {
     return Flux.defer(service::getAll)
+      .subscribeOn(Schedulers.parallel()).collectList()
+      .map(response -> ResponseEntity.ok().body(response))
+      .doOnError(err -> log.error("Failed to get pokemon all pokemons - {}", err.getMessage()))
+      .doOnNext(it -> log.info("Pokemons successfully founded - {}", it));
+  }
+
+  @Override
+  public Mono<ResponseEntity<List<PokemonResponse>>> getAllFake() {
+    return Flux.defer(service::getAllFake)
       .subscribeOn(Schedulers.parallel()).collectList()
       .map(response -> ResponseEntity.ok().body(response))
       .doOnError(err -> log.error("Failed to get pokemon all pokemons - {}", err.getMessage()))

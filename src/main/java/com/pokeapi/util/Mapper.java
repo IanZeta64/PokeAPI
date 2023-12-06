@@ -40,11 +40,11 @@ public class Mapper {
     imagesUrl.add(dto.getImagesUrl().otherDTO().officialArtworkDTO().ImageShinyUrl());
 
     return new Pokemon(dto.getDexNumber(), dto.getName(), dto.getHeight(), dto.getWeight(), dto.getBaseExp(),
-      abilities, types, stats, moves, imagesUrl, Instant.now(), null, true);
+      abilities, types, stats, moves, imagesUrl, Instant.now(), null, false, true);
   }
   public Pokemon RequestToEntity(PokemonRequest request){
     return new Pokemon(request.dexNumber(), request.name().concat("-").concat(request.region()), request.height(), request.weight(), request.baseExp(),
-      request.abilities(), request.types(), request.stats(), request.moves(), request.spritesUrl(), Instant.now(), null, true);
+      request.abilities(), request.types(), request.stats(), request.moves(), request.spritesUrl(), Instant.now(), null, true, true);
   }
   public PokemonResponse EntityToResponse(Pokemon entity){
     return new PokemonResponse(entity.getId(), entity.getDexNumber(), entity.getName(), entity.getHeight(), entity.getWeight(),
