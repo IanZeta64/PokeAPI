@@ -28,7 +28,7 @@ public class PokeAPIControllerImpl implements PokeAPIController{
   }
 
   @Override
-  public Mono<ResponseEntity<PokemonResponse>> registerByDexNumber(Integer dexNumber) {
+  public Mono<ResponseEntity<Void>> registerByDexNumber(Integer dexNumber) {
     return Mono.defer(() -> service.registerByDexNumber(dexNumber))
       .subscribeOn(Schedulers.parallel())
       .map(response -> ResponseEntity.status(201).body(response))
@@ -37,7 +37,7 @@ public class PokeAPIControllerImpl implements PokeAPIController{
   }
 
   @Override
-  public Mono<ResponseEntity<PokemonResponse>> registerByName(String name) {
+  public Mono<ResponseEntity<Void>> registerByName(String name) {
     return Mono.defer(() -> service.registerByName(name))
       .subscribeOn(Schedulers.parallel())
       .map(response -> ResponseEntity.status(201).body(response))
@@ -85,7 +85,7 @@ public class PokeAPIControllerImpl implements PokeAPIController{
   public Mono<ResponseEntity<PokemonResponse>> update(PokemonRequest request, String id) {
     return Mono.defer(() -> service.update(request, id))
       .subscribeOn(Schedulers.parallel())
-      .map(response -> ResponseEntity.status(200).body(response))
+      .map(response -> ResponseEntity.status(202).body(response))
       .doOnError(err -> log.error("Failed to update pokemon - {}", err.getMessage()))
       .doOnNext(it -> log.info("Pokemon successfully updated - {}", it));
   }
@@ -103,7 +103,7 @@ public class PokeAPIControllerImpl implements PokeAPIController{
   public Mono<ResponseEntity<Void>> deleteById(String id) {
     return Mono.defer(() -> service.deleteById(id))
       .subscribeOn(Schedulers.parallel())
-      .map(response -> ResponseEntity.ok().body(response))
+      .map(response -> ResponseEntity.status(204).body(response))
       .doOnError(err -> log.error("Failed to delete pokemon by register ID - {}", err.getMessage()))
       .doOnNext(it -> log.info("Pokemon successfully deleted - {}", it));
   }
