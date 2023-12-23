@@ -40,34 +40,43 @@ public class PokeAPIServiceImpl implements PokeAPIService {
               if (Boolean.TRUE.equals(existsByName)) {
                 return Mono.error(new DuplicatedPokemonException(String.format(DUPLICATED_POKEMON_EXCEPTION_MSG, NAME, request.fullName()))); //EXCEPTION
               }
-              return repository.save(mapper.RequestToEntity(request)).map(mapper::EntityToResponse); //SAVE A NEW FKM
+              return repository.save(mapper.RequestToEntity(request)).map(mapper::EntityToResponse);//SAVE A NEW FKM
+//                .switchIfEmpty(Mono.error(new PokemonNotCreatedException(String.format(POKEMON_NOT_CREATED_EXCEPTION_MSG, request.fullName())))); //EXCEPTION
             });
         });
-//        .switchIfEmpty(Mono.error(new PokemonNotCreatedException(String.format(POKEMON_NOT_CREATED_EXCEPTION_MSG, request.fullName())))); //EXCEPTION
     }).subscribeOn(Schedulers.boundedElastic());
   }
 
   @Override
-  public Mono<PokemonResponse> registerByDexNumber(Integer dexNumber) {
+  public Mono<Void> registerByDexNumber(Integer dexNumber) {
     return Mono.defer(() -> {
       log.info("Search pokemon by Dex number - {}", dexNumber);
       return repository.existsByDexNumber(dexNumber)
         .flatMap(exists -> {
           if (Boolean.TRUE.equals(exists)) {
-            return repository.findAllByDexNumberAndIsAvailableTrue(dexNumber)
-              .next().map(mapper::EntityToResponse);
+            return Mono.error(new DuplicatedPokemonException(String.format(DUPLICATED_POKEMON_EXCEPTION_MSG, DEX_NUMBER, DEX_NUMBER)));
           }
           return client.getByDexNumber(dexNumber).map(mapper::DTOToEntity)
-            .flatMap(repository::save).map(mapper::EntityToResponse);
-
-        }).switchIfEmpty(Mono.error(new PokemonNotFoundException(
-          String.format(POKEMON_NOT_FOUND_EXCEPTION_MSG, DEX_NUMBER, dexNumber))));//EXCEPTION;
+            .flatMap(repository::save).switchIfEmpty(Mono.error(new PokemonNotFoundException(
+              String.format(POKEMON_NOT_FOUND_EXCEPTION_MSG, DEX_NUMBER, dexNumber)))).then();//EXCEPTION;;
+        });
     }).subscribeOn(Schedulers.boundedElastic());
   }
 
   @Override
-  public Mono<PokemonResponse> registerByNamer(String id) {
-    return null;
+  public Mono<Void> registerByName(String name) {
+    return Mono.defer(() -> {
+      log.info("Search pokemon by name - {}", name);
+      return repository.existsByName(name)
+        .flatMap(exists -> {
+          if (Boolean.TRUE.equals(exists)) {
+            return Mono.error(new DuplicatedPokemonException(String.format(DUPLICATED_POKEMON_EXCEPTION_MSG, NAME, name)));
+          }
+          return client.getByName(name).map(mapper::DTOToEntity)
+            .flatMap(repository::save).switchIfEmpty(Mono.error(new PokemonNotFoundException(
+              String.format(POKEMON_NOT_FOUND_EXCEPTION_MSG, NAME, name)))).then();//EXCEPTION;
+        });
+    }).subscribeOn(Schedulers.boundedElastic());
   }
 
   @Override
@@ -112,10 +121,10 @@ public class PokeAPIServiceImpl implements PokeAPIService {
             return Mono.error(new PokemonNotFoundException(String.format(POKEMON_NOT_FOUND_EXCEPTION_MSG,ID, id)));//EXCEPTION
           }
           return repository.findById(id)
-            .flatMap(pokemon -> repository.save(pokemon.update(request)))
-            .map(mapper::EntityToResponse);
+            .switchIfEmpty(Mono.error(new PokemonNotUpdatedException(String.format(POKEMON_NOT_UPDATED_EXCEPTION_MSG, request.fullName()))))//EXCEPTION;
+            .flatMap(pokemon -> repository.save(pokemon.update(request))).map(mapper::EntityToResponse);
         });
-//        .switchIfEmpty(Mono.error(new PokemonNotUpdatedException(String.format(POKEMON_NOT_UPDATED_EXCEPTION_MSG, request.fullName()))));//EXCEPTION
+
     }).subscribeOn(Schedulers.boundedElastic());
   }
 
@@ -123,8 +132,10 @@ public class PokeAPIServiceImpl implements PokeAPIService {
   public Mono<PokemonResponse> getById(String id) {
     return Mono.defer(() -> {
         log.info("Getting pokemon by register ID - {}", id);
-        return repository.findByIdAndIsAvailableTrue(id).map(mapper::EntityToResponse);
-      }).switchIfEmpty(Mono.error(new PokemonNotFoundException(String.format(POKEMON_NOT_FOUND_EXCEPTION_MSG, ID, id)))) //EXCEPTION
+        return repository.findByIdAndIsAvailableTrue(id)
+          .switchIfEmpty(Mono.error(new PokemonNotFoundException(String.format(POKEMON_NOT_FOUND_EXCEPTION_MSG, ID, id)))) //EXCEPTION
+          .map(mapper::EntityToResponse);
+      })
       .subscribeOn(Schedulers.boundedElastic());
   }
 
@@ -137,12 +148,14 @@ public class PokeAPIServiceImpl implements PokeAPIService {
           if (Boolean.FALSE.equals(exists)) {
             return Mono.error(new PokemonNotFoundException(String.format(POKEMON_NOT_FOUND_EXCEPTION_MSG, ID, id))); //EXCEPTION
           }
-          return repository.findByIdAndIsAvailableTrueAndIsFakeTrue(id).flatMap(pokemon -> {
+          return repository.findByIdAndIsAvailableTrueAndIsFakeTrue(id)
+            .switchIfEmpty(Mono.error(new PokemonNotDeletedException(String.format(POKEMON_NOT_DELETED_EXCEPTION_MSG, id))))
+            .flatMap(pokemon -> {
             pokemon.changeAvailability();
             return repository.save(pokemon).then();
         });
         });
-//        .switchIfEmpty(Mono.error(new PokemonNotDeletedException(String.format(POKEMON_NOT_DELETED_EXCEPTION_MSG, id))));
+
     }).subscribeOn(Schedulers.boundedElastic());
   }
 }

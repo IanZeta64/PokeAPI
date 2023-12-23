@@ -14,12 +14,12 @@ public record PokemonRequest(
   Integer dexNumber,
   @NotBlank(message = "Pokemon name can not be blank")
   @Pattern(regexp = "^[a-zA-Z]+$", message = "The name should only contain letters")
-  @Size(max = 4, message = "The pokemon name should have a maximum of 10 letters")
+  @Size(max = 10, message = "The pokemon name should have a maximum of 10 letters")
   @Size(min = 1, message = "The pokemon name should have a minimum of 1 letters")
   String name,
   @NotBlank(message = "Pokemon region can not be blank")
   @Pattern(regexp = "^[a-zA-Z]+$", message = "The name should only contain letters")
-  @Size(max = 4, message = "The pokemon region should have a maximum of 10 letters")
+  @Size(max = 10, message = "The pokemon region should have a maximum of 10 letters")
   @Size(min = 1, message = "The pokemon region should have a minimum of 1 letters")
   String region,
 

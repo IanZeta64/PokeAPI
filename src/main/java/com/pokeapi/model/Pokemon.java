@@ -57,7 +57,7 @@ public class Pokemon {
 
   public Pokemon update(PokemonRequest request) {
     this.dexNumber = request.dexNumber();
-    this.name = request.name();
+    this.name = request.fullName();
     this.height = request.height();
     this.weight = request.weight();
     this.baseExp = request.baseExp();

@@ -16,10 +16,10 @@ import java.util.List;
 public interface PokeAPIController {
   @PostMapping
   Mono<ResponseEntity<PokemonResponse>> save(@Validated @RequestBody PokemonRequest request);
-  @PostMapping("/register/dex/{dexNumber}")
-  Mono<ResponseEntity<PokemonResponse>> registerByDexNumber( @PathVariable Integer dexNumber);
-  @PostMapping(value = "/register/name", params = "name")
-  Mono<ResponseEntity<PokemonResponse>> registerByName( @RequestParam String name);
+  @PostMapping("/register/{dexNumber}")
+  Mono<ResponseEntity<Void>> registerByDexNumber( @PathVariable Integer dexNumber);
+  @PostMapping(value = "/register", params = "name")
+  Mono<ResponseEntity<Void>> registerByName( @RequestParam String name);
   @GetMapping
   Mono<ResponseEntity<List<PokemonResponse>>> getAll();
   @GetMapping("/fakemon")

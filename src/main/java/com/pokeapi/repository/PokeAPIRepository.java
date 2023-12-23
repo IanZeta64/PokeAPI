@@ -10,6 +10,7 @@ import java.util.Optional;
 public interface PokeAPIRepository extends ReactiveMongoRepository<Pokemon, String> {
 
   Flux<Pokemon> findAllByDexNumberAndIsAvailableTrue(Integer dexNumber);
+  Flux<Pokemon> findAllByNameAndIsAvailableTrue(String name);
   Flux<Pokemon> findAllByNameStartingWithAndIsAvailableTrue(String name);
 
   Mono<Boolean> existsByDexNumberAndIsAvailableTrue(Integer dexNumber);
@@ -26,4 +27,6 @@ public interface PokeAPIRepository extends ReactiveMongoRepository<Pokemon, Stri
   Mono<Boolean> existsByNameAndIsAvailableTrue(String name);
 
   Mono<Boolean> existsByDexNumber(Integer integer);
+
+  Mono<Boolean> existsByName(String name);
 }
